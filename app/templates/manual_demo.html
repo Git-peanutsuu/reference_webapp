@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% block content %}
+<main>
+    <div class="py-2 text-center">
+      <!-- <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
+      <h2>APAスタイル手動入力テンプレート</h2>
+      <p class="lead text-break">順に文献の情報を入力し完成ボタンを押すと、フォーマットが完成します</p>
+    </div>
+
+    <div class="main row g-5 justify-content-center ">
+      <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">文献フォーマット</h4>  
+        <form name="formref" id="formGroup" method="POST" action ="{{ url_for('.sendManualTemplates') }}">
+          <div class="row g-3">
+            <fieldset class="format-select-field">
+              <label for="format-select" class="m-1">文献の種類を選んでください</label>
+              <div>
+              <select name="form-select" id="format-select" aria-label="文献選択">
+                <option value="1">日本語の書籍</option>
+                <option value="2">日本語の論文</option>
+                <option value="3">日本語のWEBサイト</option>
+                <option value="4">英語の書籍</option>
+                <option value="5">英語の論文</option>
+                <option value="6">英語のWEBサイト</option>
+              </select>
+              <hr class="mb-sm-0">
+              </div>
+            </fieldset>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <div class=flashes>
+             {% for category, message in messages %}
+                <div class="{{ category }}">
+                  <div class=" text-break text-danger mt-1">{{ message }}</div>
+                </div>
+               </div>
+             {% endfor %}
+            {% endif %}
+           {% endwith %}
+            
+            <fieldset class="websiteSelect">
+              <label class="m-1" for ="website-type-select">APAでは新聞デジタル版（読売など）、政府機関、ウェブニュース（ロイターなど）では引用方法が厳密には異なります<br>どちらかを選んでください</label>
+              <div>
+              <select class="m-1" name="website-select" id="website-type-select" aria-label="ニュースタイプ選択">
+                <option value="newspaper">新聞デジタル版</option>
+                <option value="newssitearticle">政府機関・ウェブニュース</option>
+              </select>
+              <hr class="mb-sm-0">
+              <div>
+            </fieldset>
+           <fieldset class="author">
+            <div>
+            {{ form.hidden_tag() }}
+            {{ form.author.label(for="author", class="form-label") }}
+            <p class="text-break text-muted fs-6" id = "authorSubLabel">例) カール・マルクス, エンゲルス[編]</p>
+            {{ form.author(class="form-control", id="author")}}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+           <fieldset class="year">
+            <div>
+            {{ form.hidden_tag() }}
+            {{ form.year.label(for="year", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="yearSubLabel">例) 1969</p>
+            {{ form.year(class="form-control",id="year") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+           <fieldset class="title">
+            <div>
+            {{ form.hidden_tag() }}
+            {{ form.title.label(for="title", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="tiltleSubLabel">例) 資本論(マルクス)1</p>
+            {{ form.title(class="form-control", id="title") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+           <fieldset class="magazine">
+            <div>
+            {{ form.hidden_tag() }}
+            {{ form.magazine.label(for="magazine", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="magazineSubLabel">例) ○○研究</p>
+            {{ form.magazine(class="form-control", id="magazine") }}
+            <hr class="mb-sm-0">
+            </div>
+           </div>
+           </fieldset>
+
+           <fieldset class ="ifPublisherIsCheckbox">
+            <div class ="mt-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="true" id="publisherCheckbox" name="IsPublisher" checked>
+              <label class="form-check-label" for="publisherCheckbox">
+                発行機関が必要なら、左のアイコンにチェックしてください
+              </label>
+              <p class="text-muted">発行機関のフォームがでてきます</p>
+            </div>
+            </div>
+           </fieldset>
+
+           <fieldset class="publisher">
+            <div class ="mt-3">
+            {{ form.hidden_tag() }}
+            {{ form.publisher.label(for="publisher", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="publisherSubLabel">例) 岩波文庫 白 125-1</p>
+            {{ form.publisher(class="form-control",id="publisher") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+           <fieldset class ="ifVolumeIsCheckbox">
+            <div class ="mt-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="true" id="volumeCheckbox" name = "IsVolume" checked>
+              <label class="form-check-label" for="volumeCheckbox">
+                巻があれば、左のアイコンにチェックしてください
+              </label>
+              <p class="text-muted">巻数のフォームがでてきます</p>
+            </div>
+           </div>
+           </fieldset>
+
+           <fieldset class="volume">
+           
+            <div class ="mt-3">
+            {{ form.hidden_tag() }}
+            {{ form.volume.label(for="volume", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="volumeSubLabel">例) 1</p>
+            {{ form.volume(class="form-control", id="volume") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+           <fieldset class ="ifIssueIsCheckbox">
+            <div class ="mt-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="true" id="issueCheckbox" name = "IsIssue" checked>
+              <label class="form-check-label" for="issueCheckbox">
+                号があれば、左のアイコンにチェックしてください
+              </label>
+              <p class="text-muted">号数のフォームがでてきます</p>
+            </div>
+            </div>
+           </fieldset>
+
+           <fieldset class="issue">
+            <div class ="mt-3">
+            {{ form.hidden_tag() }}
+            {{ form.issue.label(for="issue", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="issueSubLabel">例) 2</p>
+            {{ form.issue(class="form-control", id="issue") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+           <fieldset class="page">
+            <div class ="mt-3">
+            {{ form.hidden_tag() }}
+            {{ form.page.label(for="page", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="pageSubLabel">例) 307</p>
+            {{ form.page(class="form-control", id="page") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+           <fieldset class="url">
+            <div class ="mt-3">
+            {{ form.hidden_tag() }}
+            {{ form.url.label(for="url", class="form-label") }}
+            <p class="text-break text-muted fs-6" id="urlSubLabel">例) http://hdl.handle.net/01234/56789 or https://doi.org/10.12345/~</p>
+            {{ form.url(class="form-control", id="url") }}
+            <hr class="mb-sm-0">
+            </div>
+           </fieldset>
+
+            <fieldset>
+            <div class="function_button">
+              <div class="d-flex justify-content-center mt-3">
+                <button id="submit" class="w-25 m-2 btn btn-primary btn-lg " type="submit">結果を生成する</button>
+                <input type="reset" class="w-25 m-2 btn btn-secondary btn-lg" id= "reset" value="リセットする"/>
+              </div>
+            </div>
+            </fieldset>
+          </form>
+            
+
+            <div class="resultArea">
+              <hr>
+              <h5>結果</h5>
+              <blockquote class="w-100 d-flex justify-content-center text-break p-3" style = "background-color: hsl(0, 0%, 95%);">
+                {% if current_result %}
+                <p id="formtargetResultTextarea" rows="3" style = "background-color: hsl(0, 0%, 95%);">{{ current_result }}</p>
+                {% else %}
+                <p id="exampleFormControlTextarea1" rows="3" class="text-muted" style = "background-color: hsl(0, 0%, 95%);">例） 参考ひかる. (2022). 参考文献表現における普遍性. ○○学会. <i>○○研究</i>, 11(7), 12-23. http://doi.org/10.12345/jasca.2022.11_1223</p>
+                {% endif %}
+              </blockquote>
+              <div class ="d-flex justify-content-end">
+              <button id="result_copy_button" class="w-25 btn btn-secondary btn-sm" style = "vertical-align: middle;">
+                <i class="bi-clipboard" id="copyicon"></i>
+                <span id="copyiconAppendedText">コピーする</span>
+              </button>
+            </div>
+            </div>
+            <ul>
+                {% if session['results'] %}
+                {% for result in range( session['results'] | length -1) %}
+                    <li>{{ session['results'][result] }}</li>
+                {% endfor %}
+                {% endif %}
+              </ul>
+            
+          </div>
+      </div>
+    </div>
+</main>
+<script src="{{url_for('static', filename='js/manual_form.js')}}" charset="utf-8"></script>
+{% endblock %}
