@@ -1,4 +1,4 @@
-import pytest
+# import pytest
 
 # fixture デコレータにおける関数は、moduleベース。
 # Pythonでは__init__.pyをすることでその位置にあるファイル軍はモジュールとして扱われている。

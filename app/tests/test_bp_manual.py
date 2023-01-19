@@ -1,21 +1,19 @@
 from flask import session, request
-from TranslationApp.app.views_form_manual import bp_manuform
-from TranslationApp.app import create_app 
-from TranslationApp.app.views_form_manual import ManualFormatter
-import coverage
+from reference_webapp.app.views_form_manual import bp_manuform, ManualFormatter
+from reference_webapp.app import create_app
 def test_app():
     app = create_app(mode='DEV')
     app.config['TESTING'] = True
     app.register_blueprint(bp_manuform, url_prefix='/')
     web = app.test_client()
-    
+
     with app.test_request_context():
         #solution to RuntimeError outside of context and test_request_context is a context local that acts like a global variable see https://testdriven.io/blog/flask-contexts-advanced/
         with web:
             rv = web.get('/manual/')
             assert rv.status_code == 200
 
-            data1 = {                
+            data1 = {
                 "form_type":"1",
                 "website_type":"newspaper",
                 "author":"野田サトル",
@@ -40,10 +38,10 @@ def test_app():
             result = test_manual.funcAll()
             assert len(session['results']) == 1
             assert result =='野田サトル. (2015). <em>ゴールデンカムイ 1 (ヤングジャンプコミックス) </em>. 集英社. 全pp.188.'
-            
+
             # ---2
             rv = web.get('/manual/')
-            data2 = {                
+            data2 = {
                 "form_type":"2",
                 "website_type":"newspaper",
                 "author":"中川",
@@ -68,7 +66,7 @@ def test_app():
             # クライアント側でform-type選択時に制御されているため絶対に起こらないと考えられるが、is_publisherがNoneにしても入力されていると集英社の文字がある。
             # ---
             rv = web.get('/manual/')
-            data3 = {                
+            data3 = {
                 "form_type":"3",
                 "website_type":"newssitearticle",
                 "author":"テスト前田",
@@ -87,10 +85,10 @@ def test_app():
             test_manual = ManualFormatter(data3)
             result = test_manual.funcAll()
             assert result =="テスト前田. (2000). <em>テストの社会学</em>. <br><script>alert(2)</script>"
-            
+
             # ---
             rv = web.get('/manual/')
-            data4 = {                
+            data4 = {
                 "form_type":"4",
                 "website_type":"newssitearticle",
                 "author":"テス川",
@@ -109,10 +107,10 @@ def test_app():
             test_manual = ManualFormatter(data4)
             result = test_manual.funcAll()
             assert result =="テス川. (1977). <em>テスト国における政治</em>. . pp.9999999."
-            #全pp.ではなくpp.が出力 
+            #全pp.ではなくpp.が出力
             # --- EN JOURNAL
             rv = web.get('/manual/')
-            data5 = {                
+            data5 = {
                 "form_type":"5",
                 "website_type":"newssitearticle",
                 "author":"ジェイムズ・*'8%$#??//\nw",#Pythonでは特殊文字として認識されてしまうが、クライアント側の入力では認識されずそのままの出力を確認
@@ -131,10 +129,10 @@ def test_app():
             test_manual = ManualFormatter(data5)
             result = test_manual.funcAll()
             assert result =="ジェイムズ・*'8%$#??//\nw. (2010). テストの覇権争い. テスト出版社. <em>”</em>, 29, 32-45. <br>https//:testtest"
-            
+
             # --- EN NEWS
             rv = web.get('/manual/')
-            data6 = {                
+            data6 = {
                 "form_type":"6",
                 "website_type":"newspaper",
                 "author":"tst-b & tst-a",
@@ -154,9 +152,9 @@ def test_app():
             result = test_manual.funcAll()
             assert not len(session['results']) == 5 #6
             assert result =="tst-b & tst-a. (2023). how testable test tests tested tests. <em>test organization</em>. <br>https//:test_for_everyone.org"
-            
+
             rv = web.get('/manual/')
-            data7 = {                
+            data7 = {
                 "form_type":"1",
                 "website_type":"newspaper",
                 "author":"ddd",

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from nbformat import ValidationError
 from wtforms import StringField, URLField, SubmitField
-from wtforms.validators import DataRequired, URL, InputRequired
+from wtforms.validators import DataRequired
 import re
 from flask import flash
 
@@ -17,14 +17,14 @@ class FormatDisplay(FlaskForm):
     page = StringField('page/ページ:')
     url = URLField('URL or doi:')
     submit = SubmitField('reflect')
-    
+
     # def validate_title(self, title):
     #     """バリデーション内容
     #     - 「」をタイトルのところで使用するので、禁止
     #     """
     #     if "「" in title.data or "」" in title.data:
     #         raise ValidationError("サブタイトルは「」ではなく『』を使用して下さい")
-        
+
     # def validate_year(self, year):
     #     """バリデーション内容
     #     - ()を日付のところで使用するので、禁止

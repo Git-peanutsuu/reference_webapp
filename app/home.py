@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, Blueprint
+from flask import render_template, Blueprint
 bp_home = Blueprint('bp_home', __name__, url_prefix='')
 @bp_home.route('/', methods=['GET'])
 def index():

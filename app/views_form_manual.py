@@ -1,6 +1,6 @@
 from flask import Markup
 from .forms import FormatDisplay
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from flask import Blueprint, render_template, request, session
 
 bp_manuform = Blueprint('bp_manuform', __name__, url_prefix='')
 
@@ -32,46 +32,38 @@ def sendManualTemplates():
     current_result= manual.funcAll()
     print('BEGINING WITH :',session)
     if session.get('results') is None:
-        print('session.clear-------')
+        # print('session.clear-------')
         session.clear()
     if not 'results' in session:
         session['results'] = []
         session['results'].append(current_result)
         session['results'] = session['results']
-        print('result_nameをcreated')
-        print(type(session.get('results')))
+        # print('result_nameをcreated')
         return render_template("manual_form.html", form= form, current_result=current_result)
     if 'results' in session and current_result in session.get('results'):
-        print("おなじ")
+        # print("same value")
         return render_template("manual_form.html", form= form, current_result=current_result)
     if 'results' in session and not current_result in session.get('results'):
         if len(session['results']) == 6:
             session['results'].pop(0)
             session['results'].append(current_result)
             session['results'] = session['results']
-            print('len 発動!!!!\n',session)
+            # print('len 発動!!!!\n',session)
             return render_template("manual_form.html", form= form, current_result=current_result)
-        print('count+1')
+        # print('count+1')
         session['results'].append(current_result)
-        print(session)
         session['results'] = session['results']
         return render_template("manual_form.html", form= form, current_result=current_result)
-    print('ERROR session.clear method conducted')
+    # print('ERROR session.clear method conducted')
     session.clear()
     return render_template("manual_form.html", form= form, current_result=current_result)
 
 class ManualFormatter:
     ref_dict = {}
     format_result = ''
-    
+
     def __init__(self, arg_dict:dict) -> None:
         self.ref_dict = arg_dict
-    # def changeEmptytoNone(self):
-    #     'いらなくね？判断に必要なやつは全部GETしてる'
-    #     for x,y in self.ref_dict.items():
-    #         if y == '':
-    #             self.ref_dict[x] = None
-    #     self.ref_dict
     def get_JP_BOOK(self):
         '1)日本語 & 書籍'
         return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). <em>{self.ref_dict.get('title')}</em>. {self.ref_dict.get('publisher')}. 全pp.{self.ref_dict.get('page')}.")
@@ -82,7 +74,7 @@ class ManualFormatter:
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('volume')}({self.ref_dict.get('issue')}), {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
         elif param_vol == "true" and param_iss == None:
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('volume')}, {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
-        elif param_vol == None and param_iss == "true": 
+        elif param_vol == None and param_iss == "true":
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('issue')}, {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
         else:
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
@@ -106,7 +98,7 @@ class ManualFormatter:
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('volume')}({self.ref_dict.get('issue')}), {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
         elif param_vol == 'true' and param_iss == None:
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('volume')}, {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
-        elif param_vol == None and param_iss == 'true': 
+        elif param_vol == None and param_iss == 'true':
             return Markup(f"{self.ref_dict.get('author')}. ({self.ref_dict.get('year')}). {self.ref_dict.get('title')}. {self.ref_dict.get('publisher')}. <em>{self.ref_dict.get('magazine')}</em>, {self.ref_dict.get('issue')}, {self.ref_dict.get('page')}. <br>{self.ref_dict.get('url')}")
         else:
         #reference:https://uow.libguides.com/uow-harvard-guide/journals-no-volume
@@ -126,11 +118,11 @@ class ManualFormatter:
 
     def createFormatResult(self):
         form_type = self.ref_dict['form_type']
-        website_type = self.ref_dict['website_type'] 
+        website_type = self.ref_dict['website_type']
         is_volume = self.ref_dict['is_volume']
         is_issue = self.ref_dict['is_issue']
         is_publisher = self.ref_dict['is_publisher']
-        
+
         if (form_type=="1"):
             self.format_result = self.get_JP_BOOK()
         elif(form_type=="2"):
@@ -148,20 +140,6 @@ class ManualFormatter:
     def funcAll(self) -> str:
         result = self.createFormatResult()
         return result
-# @bp_manuform.route('/manual', methods=['GET', 'POST'])
-# def manualGenerate():
-# #TODO selectedvalueを取得し、結果を表示させると、書籍に戻る現象がある。
-#     form = FormatDisplay()
-# #dropdown_menu = ["日本語の書籍", "日本語の論文", "日本語のWEBサイト", "英語の書籍","英語の論文","英語のWEBサイト"]
-#     if request.method == 'GET':
-#         flash('Give us reference')
-#         return render_template("manual_form.html", form= form)
-#     else:
-#         if form.validate_on_submit():
-#             get_format_value = getFormatselectValue()
-#             result = FormatGenerator(get_format_value)
-#             print(result)
-#             return render_template("manual_form.html", form=form, generate_data=result)
-#         else:
-#             flash("Invalid")
-#             return render_template("manual_form.html", form=form)
+
+#TODO selectedvalueを取得し、結果を表示させると、書籍に戻る現象がある。
+# dropdown_menu = ["日本語の書籍", "日本語の論文", "日本語のWEBサイト", "英語の書籍","英語の論文","英語のWEBサイト"]

@@ -1,9 +1,5 @@
 import pytest
-from TranslationApp.app import create_app
-from TranslationApp import *
-# from TranslationApp.app import app
-from flask import request
-from TranslationApp.app import create_app
+
 def test_displat_homepage():
     from TranslationApp.app import app
     client = app.test_client()
@@ -16,7 +12,8 @@ def test_Not_Found():
     response = client.get('/notfound')
     assert 'Page Not Found' in response.text
     assert response.status_code == 404
-    
+
+from reference_webapp.app import create_app
 @pytest.fixture()
 def test_create_app():
     app_test = create_app(mode='DEV')
@@ -44,4 +41,4 @@ def runner(app):
 # instance\config.cfg               4      0   100%
 # -------------------------------------------------
 # TOTAL                           497     91    82%
-# pytest app\tests\conftest.py 
+# pytest app\tests\conftest.py

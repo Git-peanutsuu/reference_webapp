@@ -1,7 +1,5 @@
-# from TranslationApp.app import create_app
 import requests
-from requests.exceptions import Timeout
-from flask import Markup, flash
+from flask import Markup
 
 class auto:
     def __init__(self):
@@ -113,7 +111,7 @@ class auto:
             'DOIはないが、URLはある'
             if dic.get('VL') is None:
                 'URLONLY+ VL(ボリューム/巻)がない場合 = issue Number exists'
-                # VOVUMEがない場合、発行年数PYを代わりに入れ、PY(IS)の場合もあるため変更の可能性 
+                # VOVUMEがない場合、発行年数PYを代わりに入れ、PY(IS)の場合もあるため変更の可能性
                 # https://libguides.wintec.ac.nz/APA7/faqs/missing
                 result = Markup(f'{dic.get("AU")}. ({dic.get("PY")}). {dic.get("TI")}. {dic.get("PB")}. <i>{dic.get("T2")}</i>, {dic.get("IS")}, {dic.get("SP")}.<br>{dic.get("UR")}')
                 return result
@@ -155,7 +153,7 @@ class auto:
                 return result
     def callCreateresultFunctions(self, resp):
         """
-        call methods form getting response to generating result that is Marked up. 
+        call methods form getting response to generating result that is Marked up.
         This function is called after checked if url and response are valid.
         """
         text = self.getRISTextfromResponse(resp)
