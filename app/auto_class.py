@@ -8,15 +8,14 @@ class auto:
         self.prefix_word_dict = {}
         self.prefix_word_list = ['TY','AU','PY','TI','PB','T2','VL','IS','SP','UR','DO']
         self.url = ''
-    def seturl(self, form_data:str) -> requests.models.Response:
-        'this function is independent of flow of programm. This is used in try-catch syntax with url.raise_for_status'
-        self.url = requests.get(form_data, timeout= (3.0,7.5))#https://docs.python-requests.org/en/latest/user/advanced/#timeout
-        return self.url
+    # def seturl(self, form_data:str) -> requests.models.Response:
+    #     'this function is independent of flow of programm. This is used in try-catch syntax with url.raise_for_status'
+    #     self.url = requests.get(form_data, timeout= (3.0,7.5))#https://docs.python-requests.org/en/latest/user/advanced/#timeout
+    #     return self.url
 
     def toRISResponse(self, str:str)-> requests.models.Response:
-
         str = str+'.ris'
-        ris_response = requests.get(str)
+        ris_response = requests.get(str, verify=False)
         return ris_response
     def hasValidresponse(self, url_response:requests.models.Response) -> bool:
         if url_response.ok:

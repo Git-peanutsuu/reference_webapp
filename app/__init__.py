@@ -27,10 +27,12 @@ def create_app(mode='DEV'):
     app= Flask(__name__, template_folder="templates", instance_relative_config=True)
     if mode == 'DEV':
         app.config.from_object(DefaultConfig)
-        app.config.from_envvar('FLASK_CONFIG_ENVVAR')
+        # app.config.from_envvar('FLASK_CONFIG_ENVVAR')
+        app.config.from_pyfile('config.cfg')
     else:
         app.config.from_object(ProductionConfig)
-        app.config.from_envvar('FLASK_CONFIG_ENVVAR')
+        # app.config.from_envvar('FLASK_CONFIG_ENVVAR')
+        app.config.from_pyfile('config.cfg')
 
     #https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/config.html
     return app
@@ -48,7 +50,7 @@ def page_not_found(e):
 def internal_error(e):
     errortitle = 'Internal Server Error 500'
     errortext = '運営サーバーに問題が起こりました。もう一度やり直してください'
-    print('httpステータス:{}, メッセージ:{}, 詳細:{}'.format(e.code, e.name, e.description))
+    # print('httpステータス:{}, メッセージ:{}, 詳細:{}'.format(e.code, e.name, e.description))
     return render_template('error.html',errortitle=errortitle, errortext=errortext), 500
 basedir = os.path.abspath(os.path.dirname(__file__))
 #実行中のスクリプトを獲得
@@ -63,11 +65,11 @@ app.register_error_handler(400, bad_request)
 app.register_error_handler(404, page_not_found)
 app.register_error_handler(500, internal_error)
 
-from reference_webapp.config.app.home import bp_home
+from app.home import bp_home
 app.register_blueprint(bp_home)
-from reference_webapp.config.app.views_form_manual import bp_manuform
+from app.views_form_manual import bp_manuform
 app.register_blueprint(bp_manuform)
-from reference_webapp.config.app.views_form_auto import bp_autoform
+from app.views_form_auto import bp_autoform
 app.register_blueprint(bp_autoform)
 #blueprint does not have own url. no way of knowing which errorhandler run. So `app.~` is used here.
 @app.route("/index")

@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template
 from flask import flash, request, session
 from .forms import CiniiSearch
-from requests.exceptions import HTTPError
-from reference_webapp.app.auto_class import auto
+from requests.exceptions import HTTPError, ConnectionError, ProxyError
+import requests
+from .auto_class import auto
+from app import internal_error
 bp_autoform = Blueprint('bp_autoform', __name__, url_prefix='')
 #Blueprintはアプリの機能の違うファイルに分割化appとviewsを分けたいとき？
 #普通であればimport _init_モジュールか、_ini_のファイルにルーティングする
@@ -21,15 +23,22 @@ def FuncAuto(form_data):
     form = CiniiSearch(request.form)
     auto_class = auto()
     try:
-        url = auto_class.seturl(form_data)
+        url = requests.get(form_data, timeout= (3.0,7.5), verify=False)
         url.raise_for_status()
     except HTTPError as e:
         # 存在しないURLをキャッチする
-        print('error message:',e.response.status_code,e.response.reason )
+        print('error message:',e.response.status_code,e.response.reason)
         print(e)
         flash("*リクエストに失敗しました 無効なURLなどの原因があります:requests.exceptions.HTTPError")
-        # abort(404)
         return render_template('auto_form.html',form=form), 404#requests.exceptions.HTTPError
+    except ConnectionError as e:
+        print('ConnectionError:',e)
+        internal_error(e)
+    except ProxyError as e:
+        print('Proxyerror:',e)
+        internal_error(e)
+    except:
+        internal_error
     resp = auto_class.toRISResponse(form_data)
     if auto_class.hasValidresponse(resp) == False:
         # CiNiiのURLではないURLがバリデーションを通過してしまった際のエラー
@@ -67,9 +76,3 @@ def FuncAuto(form_data):
     # print('ERROR session.clear method conducted')
     session.clear()
     return render_template('auto_form.html',form=form, current_result=current_result)
-# @bp_autoform.errorhandler(404)
-# def error_404(e):
-#     'abort(404)からの呼び出し'
-#     form = CiniiSearch(request.args)
-#     print(e)
-#     return render_template('auto_form.html', form=form), 404

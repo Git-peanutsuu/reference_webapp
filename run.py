@@ -4,7 +4,7 @@ if __name__ == '__main__':
     #コマンドラインから実行すると、mainが格納される
     #つまりコマンドラインから実行されたとき、以下を実行するという意味
     #importされたときには、nameにはモジュール名が格納されるため、以下の文は実行されない。
-    app.run(debug=True)
+    app.run()
     #アプリを起動(ブラウザで立ち上がる様に)
 
 # app created learning these sites
