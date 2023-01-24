@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "477debe369a99773abbd8ea94c8411cf9378f183dbde555c61ef3c7ef8988237"
+            "sha256": "2685f41a6b51b2360c8c981ff3de9e07954bce8ee5a7bf6b551a20014d2a92b4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1230,6 +1230,14 @@
             "index": "pypi",
             "version": "==3.0.9"
         },
+        "pypiwin32": {
+            "hashes": [
+                "sha256:67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775",
+                "sha256:71be40c1fbd28594214ecaecb58e7aa8b708eabfa0125c8a109ebd51edbd776a"
+            ],
+            "index": "pypi",
+            "version": "==223"
+        },
         "pyrsistent": {
             "hashes": [
                 "sha256:055ab45d5911d7cae397dc418808d8802fb95262751872c841c170b0dbf51eed",
@@ -1356,7 +1364,7 @@
                 "sha256:9dd98384da775afa009bc04863426cb30596fd78c6f8e4e2e5bbf4edf8029504",
                 "sha256:a55db448124d1c1484df22fa8bbcbc45c64da5e6eae74ab095b9ea62e6d00496"
             ],
-            "index": "pypi",
+            "markers": "sys_platform == 'win32' and platform_python_implementation != 'PyPy'",
             "version": "==305"
         },
         "pyzmq": {
