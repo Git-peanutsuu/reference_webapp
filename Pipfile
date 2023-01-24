@@ -108,7 +108,7 @@ zipp = "==3.10.0"
 "zope.event" = "==4.5.0"
 "zope.interface" = "==5.5.2"
 waitress = "*"
-pywin32 = "==225"
+pywin32 = "*"
 
 [dev-packages]
 
