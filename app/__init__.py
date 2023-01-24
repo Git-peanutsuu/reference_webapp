@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template
 from config import ProductionConfig
 from config import DefaultConfig
+from reference_webapp.config import ProductionConfig, DefaultConfig
 from datetime import timedelta
 # import os
 # def load_config(mode=os.environ.get('MODE')):
@@ -24,15 +25,16 @@ from datetime import timedelta
 # app = Flask(__name__)
 # app.config.from_object(config)
 def create_app(mode='DEV'):
-    app= Flask(__name__, template_folder="templates", instance_relative_config=True)
+    app= Flask(__name__, template_folder="templates", instance_path="/app/instance/")
     if mode == 'DEV':
         app.config.from_object(DefaultConfig)
-        # app.config.from_envvar('FLASK_CONFIG_ENVVAR')
-        app.config.from_pyfile('config.cfg')
+        app.config.from_envvar('FLASK_CONFIG_ENVVAR')
+        # app.config.from_pyfile('config.cfg') 
+        # Vscode can not recognize instance folder appropreately because of Pipenv set in the working directory
     else:
         app.config.from_object(ProductionConfig)
-        # app.config.from_envvar('FLASK_CONFIG_ENVVAR')
-        app.config.from_pyfile('config.cfg')
+        app.config.from_envvar('FLASK_CONFIG_ENVVAR')
+        # app.config.from_pyfile('config.cfg')
 
     #https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/config.html
     return app
@@ -56,7 +58,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #実行中のスクリプトを獲得
 print('basedir==',basedir)
 
-app = create_app(mode='DEV')
+app = create_app(mode='PRO')
 # for checking
 # print("C O N F I G >>",app.config)
 # print("instance_path === ",app.instance_path)

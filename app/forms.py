@@ -35,10 +35,12 @@ class CiniiSearch(FlaskForm):
     #url_form.htmlの方のFlaskForm
     url_name = URLField('CiNii論文URL入力欄',
                         validators=[DataRequired(message="必須です")])
-    def validate_url(self, url):
-        url_pattern = "(https://cir.nii.ac.jp/crid/)+"
+    def validate_url(self, url_name):
+        'URLにマッチしなかった場合、ValidationError'
+        url_pattern = re.compile("(https://cir.nii.ac.jp/crid/)+")
     #https://cir.nii.ac.jp/crid/1390001205712913152
     #https?://[\w!?/+\-_~;.,*&@#$%()'[\]]+
-        if re.match(url_pattern, url)  is None:
-            flash('*現在CiNiiのURLのみのご使用をお願いしております。', ValidationError)
-            return ValidationError
+        if not url_pattern.match(url_name):
+            return False
+        return True
+            # raise ValidationError('*現在CiNiiのURLのみのご使用をお願いしております。')

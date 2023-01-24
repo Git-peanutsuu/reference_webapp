@@ -1,11 +1,11 @@
 import pytest
+# ModuleNotFound 解決法 上のディレクトリのinitを外す　https://zenn.dev/pesuchin/articles/9573476d53d234f09433
 
 def test_displat_homepage():
     from TranslationApp.app import app
     client = app.test_client()
     response = client.get('/')
     assert response.status_code == 200
-
 def test_Not_Found():
     from TranslationApp.app import app
     client = app.test_client()

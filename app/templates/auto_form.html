@@ -8,7 +8,7 @@
     </div>
     <div class="row g-5 justify-content-center ">
       <div class="col-md-7 col-lg-8">
-        <form method="POST" action ="{{ url_for('.FuncAuto') }}">
+        <form method="POST" action ="{{ url_for('.createAutoTemplates') }}">
         <h4 class="mb-3">参考文献</h4>
           <div class="row g-3">
             <fieldset>
@@ -17,6 +17,7 @@
                  {{ form.url_name.label(for="ciniiurl", class="form-label") }}
                  <p class="text-break text-muted fs-6">https://cir.nii.ac.jp から始まるURLを入力する</p>
                  {{ form.url_name(class="form-control",id="ciniiurl", placeholder="例）https://cir.nii.ac.jp/crid/0123456789012345678") }}
+                 <div class="errormessage">
                  {% with messages = get_flashed_messages(with_categories=true) %}
                   {% if messages %}
                     <div class=flashes>
@@ -28,6 +29,13 @@
                    {% endfor %}
                   {% endif %}
                  {% endwith %}
+
+                 <ul class=errors>
+                  {% if form.url_name.error %}
+                    <li class="error">{{ form.url_name.error }}</li>
+                  {% endif %}
+                </ul>
+              </div>
                  <hr class="mb-3">
            </div>
             </fieldset>

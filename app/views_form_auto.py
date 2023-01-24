@@ -11,10 +11,14 @@ bp_autoform = Blueprint('bp_autoform', __name__, url_prefix='')
 @bp_autoform.route('/auto/',methods=['GET','POST'])
 def createAutoTemplates():
     form = CiniiSearch(request.form)
-    if request.method == 'POST' and form.validate_url:
+    if request.method == 'POST':
         'POSTとvalidationが通った場合にのみFuncAutoを出力'
-        form_data = form.url_name.data
-        return FuncAuto(form_data)
+        if form.validate_url(form.url_name.data):
+            form_data = form.url_name.data
+            return FuncAuto(form_data)
+        else:
+            flash('*現在CiNiiのURLのみのご使用をお願いしております。')
+            return render_template('auto_form.html', form=form)
     else:
         return render_template('auto_form.html', form=form)
 
@@ -31,14 +35,14 @@ def FuncAuto(form_data):
         print(e)
         flash("*リクエストに失敗しました 無効なURLなどの原因があります:requests.exceptions.HTTPError")
         return render_template('auto_form.html',form=form), 404#requests.exceptions.HTTPError
-    except ConnectionError as e:
-        print('ConnectionError:',e)
-        internal_error(e)
     except ProxyError as e:
         print('Proxyerror:',e)
         internal_error(e)
-    except:
-        internal_error
+    except ConnectionError as e:
+        print('ConnectionError:',e)
+        internal_error(e)
+    except Exception as e:
+        internal_error(e)
     resp = auto_class.toRISResponse(form_data)
     if auto_class.hasValidresponse(resp) == False:
         # CiNiiのURLではないURLがバリデーションを通過してしまった際のエラー

@@ -5,6 +5,7 @@ lib/
 .pytest_cache/
 __pycache__/
 venv/
+.vemv/
 #file
 /help.txt
 /pip_main.py
