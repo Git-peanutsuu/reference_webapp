@@ -24,7 +24,7 @@ from datetime import timedelta
 # app = Flask(__name__)
 # app.config.from_object(config)
 def create_app(mode='DEV'):
-    app= Flask(__name__, template_folder="templates", instance_path="/app/instance/")
+    app= Flask(__name__, template_folder="templates", instance_relative_config=True)
     if mode == 'DEV':
         app.config.from_object(DefaultConfig)
         app.config.from_pyfile('config.cfg')
