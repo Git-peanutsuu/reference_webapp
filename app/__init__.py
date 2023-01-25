@@ -24,17 +24,16 @@ from datetime import timedelta
 # app = Flask(__name__)
 # app.config.from_object(config)
 def create_app(mode='DEV'):
-    app= Flask(__name__, template_folder="templates", instance_relative_config=True)
+    app= Flask(__name__, template_folder="templates")
     if mode == 'DEV':
         app.config.from_object(DefaultConfig)
-        app.config.from_pyfile('config.cfg')
-        # app.config.from_pyfile('config.cfg') 
+        # app.config.from_pyfile('config.cfg')
+        app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY')
         # Vscode can not recognize instance folder appropreately because of Pipenv set in the working directory
     else:
         app.config.from_object(ProductionConfig)
-        app.config.from_pyfile('config.cfg')
+        app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY')
         # app.config.from_pyfile('config.cfg')
-
     #https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/config.html
     return app
 
