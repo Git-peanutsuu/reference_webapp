@@ -2,7 +2,6 @@ import os
 from flask import Flask, render_template
 from config import ProductionConfig
 from config import DefaultConfig
-from reference_webapp.config import ProductionConfig, DefaultConfig
 from datetime import timedelta
 # import os
 # def load_config(mode=os.environ.get('MODE')):
