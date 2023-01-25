@@ -32,7 +32,7 @@ def create_app(mode='DEV'):
         # Vscode can not recognize instance folder appropreately because of Pipenv set in the working directory
     else:
         app.config.from_object(ProductionConfig)
-        app.config.from_envvar('config.cfg')
+        app.config.from_pyfile('config.cfg')
         # app.config.from_pyfile('config.cfg')
 
     #https://msiz07-flask-docs-ja.readthedocs.io/ja/latest/config.html
